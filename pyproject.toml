@@ -22,7 +22,9 @@ classifiers=[
     'Operating System :: Microsoft :: Windows :: Windows 10'
 ]
 dependencies=[
-    "scikit-learn>=1.2.2"
+    "scikit-learn==1.2.2",
+    "pandas==1.5.3",
+    "numpy~=1.24.2"
 ]
 
 [project.urls]
