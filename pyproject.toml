@@ -1,0 +1,46 @@
+[build-system]
+requires = [
+    "setuptools==67.2",
+    "wheel==0.40.0",
+    "pip==23.0.1",
+    "build==0.10.0",
+    "bump2version>=1.0.1"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ML Program"
+version = "0.0.1"
+description = "Machine learning program to detect SSH Bruteforce attempts and Web attacks using packet traffic."
+readme = "README.md"
+requires-python = "~=3.9"
+license = {file = "LICENSE.md"}
+classifiers=[
+    'Programming Language :: Python :: 3',
+    'Development Status :: 5 - Production/Stable',
+    'Natural Language :: English',
+    'Operating System :: Microsoft :: Windows :: Windows 10'
+]
+dependencies=[
+    "scikit-learn>=1.2.2"
+]
+
+[project.urls]
+homepage = "https://dvt.tech"
+repository = "https://github.com/UH-MountainLions/ML_Proyect_V1"
+changelog = "https://gitlab.com/UH-MountainLions/ML_Proyect_V1/-/blob/main/CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.optional-dependencies]
+test = [
+    "pytest==7.2.2",
+    "pytest-cov==4.0.0",
+    "flake8==6.0.0"
+]
+
+[tool.pylint]
+max-line-length = 120
+# W0511: fixme tags
+disable = ["W0511"]
