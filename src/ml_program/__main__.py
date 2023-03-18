@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- encode: utf-8 -*-
-"""Entrypoint for ml_program
+"""Entrypoint for ml_program.
 
 ml_program
 Full license in LICENSE.md
@@ -68,7 +68,7 @@ def main_cli() -> None:
         # TODO setup easy CLI process
         print('Not currently implemented!')
     else:
-        gui_handler.RunGui(cleanup_flag)
+        pass
 
 
 if __name__ == '__main__':

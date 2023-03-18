@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Top-level package for ml_program
+"""Top-level package for ml_program.
 
 ml_program
 Full license in LICENSE.md
