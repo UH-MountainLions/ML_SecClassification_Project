@@ -7,3 +7,4 @@ The following components were used:
 | Python3.10   | PSF License                     | https://www.python.org/downloads/release/python-3100/ |
 | Bump2Version | MIT                             | https://github.com/c4urself/bump2version              |
 | Pandas       | BSD 3-Clause "New" or "Revised" | https://pandas.pydata.org/                            |
+| scikit-learn | BSD 3-Clause license            | https://scikit-learn.org                              |
