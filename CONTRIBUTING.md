@@ -13,7 +13,7 @@
 To build a development copy of this software you will need to prepare your box with the required applications.
 
 ### Python components
-First up, since this application was built for python==3.9, ensure that you have an instance of [Python3.9] installed
+First up, since this application was built for python==3.10, ensure that you have an instance of [Python3.10] installed
 on your dev environment.
 
 Next you will need to clone the repo locally:
@@ -124,4 +124,4 @@ the root of this repo.
 bumpversion (major|minor|patch)
 ```
 
-[python3.9]: https://www.python.org/downloads/release/python-390/
+[python3.10]: https://www.python.org/downloads/release/python-3100/
