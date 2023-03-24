@@ -10,7 +10,9 @@
   test case** demonstrating the expected behavior that is not occurring.
 
 ## Development Build
-To build a development copy of this software you will need to prepare your box with the required applications.
+To build a development copy of this software you will need to prepare your box with the required applications. These
+instructions are mostly for command line development. If you are using an IDE, you will need to look up setup 
+instructions for your specific IDE.
 
 ### Python components
 First up, since this application was built for python==3.10, ensure that you have an instance of [Python3.10] installed
