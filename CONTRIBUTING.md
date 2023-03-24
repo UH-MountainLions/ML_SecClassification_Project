@@ -42,8 +42,8 @@ virtualenv venv
 ```
 
 This will create a folder in your current directory called venv, which will contain all the required libraries, scripts,
-and executables to run an isolated Python environment specific to your project. To enable this environment you just
-activate it by running:
+and executables to run an isolated Python environment specific to your project. To enable this environment in Linux you 
+just activate it by running:
 ```commandline
 $ source venv/bin/activate
 ```
@@ -73,14 +73,14 @@ pip install ./
 
 ### Installing
 
-All other requirements are in the requirements.txt or pyproject.toml files.
+All other requirements are in the requirements-dev.txt or pyproject.toml files.
 
 ### Building
 
 ## Running the tests
 
 Unit tests have been designed around `tox` to ensure proper coverage and execution in the proper environment. This
-program is currently designed to run in `Python 3.9`.
+program is currently designed to run in `Python 3.10`.
 ```commandline
 tox
 ```

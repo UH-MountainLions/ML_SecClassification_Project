@@ -13,7 +13,7 @@ name = "ML Program"
 version = "0.0.1"
 description = "Machine learning program to detect SSH Bruteforce attempts and Web attacks using packet traffic."
 readme = "README.md"
-requires-python = "~=3.9"
+requires-python = "~=3.10"
 license = {file = "LICENSE.md"}
 classifiers=[
     'Programming Language :: Python :: 3',
@@ -28,7 +28,6 @@ dependencies=[
 ]
 
 [project.urls]
-homepage = "https://dvt.tech"
 repository = "https://github.com/UH-MountainLions/ML_Proyect_V1"
 changelog = "https://gitlab.com/UH-MountainLions/ML_Proyect_V1/-/blob/main/CHANGELOG.md"
 
