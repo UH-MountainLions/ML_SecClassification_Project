@@ -13,10 +13,11 @@ import numpy as np
 
 le = LabelEncoder()
 
+
 # Specify the file path, file name, and encoding format
 st_path = 'C:/Users/lenovo/DataSet/CIC-IDS-2017/GeneratedLabelledFlows/TrafficLabelling/'
-# st_file = 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
-st_file = 'Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv'
+st_file = 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
+# st_file = 'Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv'
 # st_file = 'Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv'
 # st_file = 'Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv'
 # st_file = 'Friday-WorkingHours-Morning.pcap_ISCX.csv'
@@ -29,6 +30,8 @@ encoding = 'utf_8'
 # Read the CSV file using pandas
 df_data = pd.read_csv(os.path.join(st_path, st_file), encoding=encoding)
 df_data.head()
+
+## Future Selection should be clearly explained.
 
 # Drop the columns that are not needed for the model
 df_features = df_data.drop(' Label', axis=1)  # Features
