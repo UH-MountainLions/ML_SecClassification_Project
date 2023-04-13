@@ -9,7 +9,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ML Program"
+name = "MLProgram"
 version = "0.0.1"
 description = "Machine learning program to detect SSH Bruteforce attempts and Web attacks using packet traffic."
 readme = "README.md"
