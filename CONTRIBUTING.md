@@ -71,6 +71,31 @@ Prerequisites are included in the `pyproject.toml` file.
 pip install ./
 ```
 
+### Training and Testing Data
+CIC-IDS2017
+Download link: https://www.unb.ca/cic/datasets/ids-2017.html
+CICIDS2017 dataset contains benign and the most up-to-date common attacks, which resembles the true real-world data 
+(PCAPs). It also includes the results of the network traffic analysis using CICFlowMeter with labeled flows based on the 
+time stamp, source, destination IPs, source and destination ports, protocols, and attack (CSV files). Also available is 
+the extracted features definition.
+
+CIC-IDS2018 on AWS
+Download instructions: https://www.unb.ca/cic/datasets/ids-2018.html
+In CSE-CIC-IDS2018 dataset, we use the notion of profiles to generate datasets in a systematic manner, which will 
+contain detailed descriptions of intrusions and abstract distribution models for applications, protocols, or lower-level
+network entities. Agents or human operators can use these profiles to generate events on the network. Due to the 
+abstract nature of the generated profiles, we can apply them to a diverse range of network protocols with different 
+topologies. Profiles can be used together to generate a dataset for specific needs.
+
+| File                                                   | Type               | Total Features (Cols) | Records (Rows) | Labeled (Y/N) |
+|--------------------------------------------------------|--------------------|-----------------------|----------------|---------------|
+| Tuesday-WorkingHours.pcap_ISCX                         | Test (Bruteforce)  | 84                    | 445,909        | Yes           |
+| Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv | Test (Web)         | 84                    | 170,367        | Yes           |
+| Friday-23-02-2018_TrafficForML_CICFlowMeter.csv        | Train (Web)        | 80                    | 1,048,576      | Yes           |
+| Thursday-22-02-2018_TrafficForML_CICFlowMeter.csv      | Train (Web)        | 80                    | 1,048,576      | Yes           |
+| Wednesday-14-02-2018_TrafficForML_CICFlowMeter.csv     | Train (Bruteforce) | 80                    | 1,048,576      | Yes           |
+
+
 ### Installing
 
 All other requirements are in the requirements-dev.txt or pyproject.toml files.
