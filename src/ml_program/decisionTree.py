@@ -16,8 +16,8 @@ le = LabelEncoder()
 
 # Specify the file path, file name, and encoding format
 st_path = 'C:/Users/lenovo/DataSet/CIC-IDS-2017/GeneratedLabelledFlows/TrafficLabelling/'
-st_file = 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
-# st_file = 'Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv'
+# st_file = 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
+st_file = 'Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv'
 # st_file = 'Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv'
 # st_file = 'Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv'
 # st_file = 'Friday-WorkingHours-Morning.pcap_ISCX.csv'
@@ -115,6 +115,6 @@ vl_equals = len(df_ddos[df_ddos['equals'] == True])
 vl_len_data = len(df_ddos)
 print('Attack', vl_equals, vl_len_data, vl_equals/vl_len_data)
 
-# df_results = pd.DataFrame(y_pred, columns=['pred'])
-# df_results = pd.concat((df_results, pd.DataFrame(y_test, columns=['test'])), axis=1)
+df_results = pd.DataFrame(y_pred, columns=['pred'])
+df_results = pd.concat((df_results, pd.DataFrame(y_test, columns=['test'])), axis=1)
 df_results
