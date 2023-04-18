@@ -46,45 +46,6 @@ CONVERT_HEADERS = {"Dst Port": ["Destination Port"],
                    "Label": ["Label"]
                    }
 
-# The list of features for detecting bruteforce (FTP/SSH) attacks.
-BRUTEFORCE_FEATURES = ['Dst Port',
-                       'Protocol',
-                       'Flow Duration',
-                       'Tot Fwd Pkts',
-                       'Tot Bwd Pkts',
-                       'TotLen Fwd Pkts',
-                       'TotLen Bwd Pkts',
-                       'Flow Byts/s',
-                       'Flow Pkts/s',
-                       'Fwd IAT Tot',
-                       'Bwd IAT Tot',
-                       'Fwd PSH Flags',
-                       'Bwd PSH Flags',
-                       'Fwd URG Flags',
-                       'Bwd URG Flags',
-                       'Fwd Header Len',
-                       'Bwd Header Len',
-                       'Fwd Pkts/s',
-                       'Bwd Pkts/s',
-                       'FIN Flag Cnt',
-                       'SYN Flag Cnt',
-                       'RST Flag Cnt',
-                       'PSH Flag Cnt',
-                       'ACK Flag Cnt',
-                       'URG Flag Cnt',
-                       'CWE Flag Count',
-                       'ECE Flag Cnt',
-                       'Down/Up Ratio',
-                       'Subflow Fwd Pkts',
-                       'Subflow Fwd Byts',
-                       'Subflow Bwd Pkts',
-                       'Subflow Bwd Byts',
-                       'Init Fwd Win Byts',
-                       'Init Bwd Win Byts',
-                       'Fwd Act Data Pkts',
-                       'Fwd Seg Size Min',
-                       ]
-
 
 def convert(lst):
     """convert a list into a dict of very specific shape
@@ -132,16 +93,17 @@ def fix_headers(data):
     return data
 
 
-def get_target_names(data, column='Label'):
-    """return a list of unique values
+def get_target_names(data, column: str = 'Label') -> list:
+    """Build a list of unique values from the 'answer key' column for supervised learning.
 
     This method was built to get a list of target labels for supervised learning. The dataframe will return the target
     values in the order they first appear and build an
 
-    :param data:
-    :return:
+    :param data: (pandas.DataFrame) Initial dataset which still has the "answer key" attached.
+    :param column: (str) Column name that contains supervised training answers
+    :return: (list) List of unique values from 'answer key' in order that they first appear in data set.
     """
-    return np.unique(data[column].values)
+    return np.unique(data[column].dropna())
 
 
 def get_targets_int(data, column='Label'):
@@ -156,19 +118,23 @@ def get_targets_int(data, column='Label'):
     return data[column].map(convert(target_names))
 
 
-def data_training_prep(data, targets):
+def data_training_prep(data):
     """Prepare data for training
 
     :param data: (pandas.DataFrame) Data set without the answer column.
-    :param targets: (pandas.Series) A pandas.Series (a single column) of the supervised data results to measure against.
-    :return: (pandas.DataFrame) and (pandas.Series) of cleaned data removing any invalid data points.
+    :return: (pandas.DataFrame) of cleaned data removing any invalid data points.
     """
-    # Build target values for decison tree classifier
+    # Drop the rows with NaN values
+    data.dropna(inplace=True)
     # Iterate over the columns in the dataframe to check if they are strings
     le = LabelEncoder()
     for col in data.columns:
         if data[col].dtypes not in ['int64', 'float64']:
             data[col] = le.fit_transform(data[col])
+            if data[col].dtype == 'int32':
+                data[col] = data[col].astype('int64')
+            elif data[col].dtype == 'float32':
+                data[col] = data[col].astype('float64')
 
     # Search for the columns with infinite values
     lt_columns = data[data.columns[data.max() == np.inf]].columns
@@ -184,18 +150,8 @@ def data_training_prep(data, targets):
     # check if there are still columns with infinite values
     lt_columns = data[data.columns[data.max() == np.inf]].columns
     assert len(lt_columns) == 0
+    return data
 
-    # Search for the columns with NaN values
-    # for st_column_nan in data.columns:
-    #     df_column_aux = data[data[st_column_nan].isna()].copy()
-    #     if len(df_column_aux) > 0:
-    #         print('df_column_aux:\n{}'.format(df_column_aux.transpose()))
-    #         print('Transpose:\n{}\n'.format(df_target[df_features[st_column_nan].isna()].transpose()))
-    #         print('st_column_nan: {}'.format(st_column_nan))
-    #         print('The total amount of NaNs are: {}'.format(len(data[data[st_column_nan].isna()])))
-    #         print('*** data ***\n{}'.format(data[st_column_nan].describe()))
-    # Drop the rows with NaN values
-    data.dropna(inplace=True)
-    targets = targets[targets.index.isin(data.index)]
-    assert len(data) == len(targets)
-    return data, targets
+
+if __name__ == '__main__':
+    print('Hommie don\'t play that')
