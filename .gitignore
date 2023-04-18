@@ -1,5 +1,6 @@
 ## Project specific
 src/ml_program/resources/TrafficLabelling
+src/ml_program/resources/.
 
 ## Python Section
 # Byte-compiled / optimized / DLL files

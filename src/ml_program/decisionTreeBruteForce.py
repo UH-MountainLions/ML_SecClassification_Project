@@ -52,6 +52,23 @@ BRUTEFORCE_FEATURES = ['Dst Port',
                        'Fwd Seg Size Min'
                        ]
 
+
+def prep_pipeline(filename, encoding='utf_8'):
+    # pre-process and clean dataset
+    pass
+    # Read the CSV file using pandas
+    data = pd.read_csv(filename, encoding=encoding)
+    data = util.fix_headers(data)
+    target_names = util.get_target_names(data)
+    feature_data = util.data_training_prep(data)  # clean and prep all data
+    # grab test answers
+    answer_key = util.get_targets_int(data)  # grab test answers before they are purged
+    # Grab only columns needed
+    feature_data = feature_data.filter(BRUTEFORCE_FEATURES, axis='columns')
+    assert len(answer_key) == len(feature_data)
+    return feature_data, answer_key, target_names
+
+
 # Craft the default specific path to the resources folder which holds the training and testing data
 st_path = os.path.join(os.getcwd(), 'resources', 'TrafficLabelling')
 # Specify the training file
@@ -72,18 +89,7 @@ st_file_2 = 'Tuesday-WorkingHours.pcap_ISCX.csv'
 # encoding = 'cp1252'
 encoding = 'utf_8'
 
-# Read the CSV file using pandas
-df_data = pd.read_csv(os.path.join(st_path, st_file), encoding=encoding)
-df_data = util.fix_headers(df_data)
-df_target_names = util.get_target_names(df_data)
-df_features = util.data_training_prep(df_data)  # clean and prep all data
-# grab test answers
-df_targets = util.get_targets_int(df_data)  # grab test answers before they are purged
-# Grab only columns needed
-df_features = df_data.filter(BRUTEFORCE_FEATURES, axis='columns')
-assert len(df_targets) == len(df_features)
-# pre-process and clean dataset
-
+df_features, df_targets, df_target_names = prep_pipeline(os.path.join(st_path, st_file))
 
 # ***************************************
 # MODELING
@@ -94,7 +100,7 @@ if USE_TRAINED_MODEL:
     # Load pretrained Decision Tree Classifier
     clf = load('decisionTree_BruteForce.joblib.backup')
     prediction_test = clf.predict(df_features)
-    true_test = df_targets
+    true_test = df_targets  # rename for classification_report
 else:
     # Build new training data
     X_train, X_test, true_train, true_test = train_test_split(df_features,
@@ -123,14 +129,7 @@ disp.plot()
 print('Confusion Matrix:\n{}'.format(cm))
 
 # New file test
-test_data = pd.read_csv(os.path.join(st_path, st_file_2), encoding=encoding, encoding_errors='ignore')
-# pre-process and clean dataset
-test_data = util.fix_headers(test_data)  # prep column headers
-test_target_names = util.get_target_names(test_data)
-test_data = util.data_training_prep(test_data)  # Clean and prep all test_data
-test_targets = util.get_targets_int(test_data)  # grab test answers before they are purged
-test_features = test_data.filter(BRUTEFORCE_FEATURES, axis='columns')  # purge all columns not required
-assert len(test_targets) == len(test_features)
+test_features, test_targets, test_target_names = prep_pipeline(os.path.join(st_path, st_file_2), encoding)
 
 
 # Make predictions

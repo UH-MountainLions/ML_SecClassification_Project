@@ -50,7 +50,7 @@ CONVERT_HEADERS = {"Dst Port": ["Destination Port"],
 def convert(lst):
     """convert a list into a dict of very specific shape
 
-    This method will take a simple list, and convert that list into a dict that is value: place
+    This method will take a simple list, and convert that list into a dict that is `value: place`
     e.g., ['one', 'two', 'three'] returns {'one': 0, 'two': 1, 'three': 2}
     This is required for DataFrame mapping of values from string to an integer in order of appearance.
 
@@ -115,6 +115,7 @@ def get_targets_int(data, column='Label'):
     :return: (list) values from `Label` column mapped as integer values.
     """
     target_names = get_target_names(data)
+    # `dataframe.map(<dict>)` works with dict `{"what you have": "what you want it to become"}`
     return data[column].map(convert(target_names))
 
 
@@ -126,6 +127,11 @@ def data_training_prep(data):
     """
     # Drop the rows with NaN values
     data.dropna(inplace=True)
+    # Drop answer columns
+    if 'Label' in data.columns:
+        data.drop(columns='Label')
+    elif ' Label' in data.columns:
+        data.drop(columns=' Label')
     # Iterate over the columns in the dataframe to check if they are strings
     le = LabelEncoder()
     for col in data.columns:
