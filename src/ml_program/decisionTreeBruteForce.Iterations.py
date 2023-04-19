@@ -54,6 +54,11 @@ BRUTEFORCE_FEATURES = ['Dst Port',
 
 
 def powerset(iterable):
+    """Build a generator to build all possible combinations from a passed list.
+
+    :param iterable: list to combine.
+    :return: a list of current combined options
+    """
     "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
     s = list(iterable)  # allows duplicate elements
     return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
@@ -75,11 +80,6 @@ def prep_pipeline(filename, file_encoding='utf_8'):
 def get_features_data(data, features=BRUTEFORCE_FEATURES):
     # Grab only columns needed
     return data.filter(features, axis='columns')
-
-
-def fit_and_predict(features, answers):
-
-    return clf
 
 
 # Craft the default specific path to the resources folder which holds the training and testing data
@@ -156,11 +156,3 @@ disp = ConfusionMatrixDisplay(confusion_matrix=cm,
                               display_labels=test_target_names)
 disp.plot()
 print('Confusion Matrix:\n{}'.format(cm))
-
-
-# if __name__ == "__main__":
-#     with concurrent.futures.ThreatPoolExecutor(max_workers=5) as executor:
-#         for x in powerset(BRUTEFORCE_FEATURES):
-#             if x == ():
-#                 continue
-#         executor.map(fit_and_predict(), x)
