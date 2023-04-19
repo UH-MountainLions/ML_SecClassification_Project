@@ -15,11 +15,11 @@ import utilities as util
 # The list of features for detecting Web Attacks.
 WEBATTACK_FEATURES = ['Dst Port',
                       'Protocol',
-                      # 'Flow Duration',
+                      'Flow Duration',
                       'Tot Fwd Pkts',
                       'Tot Bwd Pkts',
-                      'TotLen Fwd Pkts',
-                      'TotLen Bwd Pkts',
+                      # 'TotLen Fwd Pkts',
+                      # 'TotLen Bwd Pkts',
                       'Flow Byts/s',
                       'Flow Pkts/s',
                       # 'Fwd IAT Tot',
@@ -38,7 +38,7 @@ WEBATTACK_FEATURES = ['Dst Port',
                       'PSH Flag Cnt',
                       'ACK Flag Cnt',
                       'URG Flag Cnt',
-                      'CWE Flag Count',
+                      'CWE Flag Cnt',
                       'ECE Flag Cnt',
                       # 'Down/Up Ratio',
                       # 'Subflow Fwd Pkts',
@@ -78,9 +78,9 @@ st_file_2 = 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
 encoding = 'utf_8'
 
 # Read the CSV file using pandas
-df_data = pd.read_csv(os.path.join(st_path, st_file), encoding=encoding)
-df_data['Label'] = df_data['Label'].map(CONVERT_TRAINING)
+df_data = pd.read_csv(os.path.join(st_path, st_file), encoding=encoding, encoding_errors='ignore')
 df_data = util.fix_headers(df_data)
+df_data['Label'] = df_data['Label'].map(CONVERT_TRAINING)
 df_target_names = util.get_target_names(df_data)
 df_features = util.data_training_prep(df_data)  # clean and prep all data
 # pre-process and clean dataset - Grab only columns needed
@@ -94,7 +94,7 @@ assert len(df_targets) == len(df_features)
 # Split the data into training and testing sets
 X_train, X_test, true_train, true_test = train_test_split(df_features,
                                                           df_targets,
-                                                          test_size=0.6,
+                                                          test_size=0.2,
                                                           random_state=42)
 # Training the model
 # Decision Tree Classifier - This is the key part of the code.
@@ -119,8 +119,9 @@ print('Confusion Matrix:\n{}'.format(cm))
 
 # New file test
 test_data = pd.read_csv(os.path.join(st_path, st_file_2), encoding=encoding, encoding_errors='ignore')
-# pre-process and clean dataset
 test_data = util.fix_headers(test_data)  # prep column headers
+df_data['Label'] = df_data['Label'].map(CONVERT_TRAINING, na_action='ignore')
+# pre-process and clean dataset
 test_target_names = util.get_target_names(test_data)
 test_data = util.data_training_prep(test_data)  # Clean and prep all test_data
 test_targets = util.get_targets_int(test_data)  # grab test answers before they are purged
