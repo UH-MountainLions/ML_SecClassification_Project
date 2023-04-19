@@ -54,8 +54,6 @@ BRUTEFORCE_FEATURES = ['Dst Port',
                        'Fwd Act Data Pkts',
                        'Fwd Seg Size Min'
                        ]
-n_features = 80
-n_components = np.arange(0, n_features, 5)  # options for n_components
 
 
 def prep_pipeline(filename, encoding='utf_8'):
@@ -67,7 +65,7 @@ def prep_pipeline(filename, encoding='utf_8'):
     # grab test answers
     answer_key = util.get_targets_int(data)  # grab test answers before they are purged
     # Grab only columns needed
-    # feature_data = feature_data.filter(BRUTEFORCE_FEATURES, axis='columns')
+    feature_data = feature_data.filter(BRUTEFORCE_FEATURES, axis='columns')
     assert len(answer_key) == len(feature_data)
     return feature_data, answer_key, target_names
 
@@ -123,8 +121,8 @@ st_file_2 = 'Tuesday-WorkingHours.pcap_ISCX.csv'
 encoding = 'utf_8'
 
 df_features, df_targets, df_target_names = prep_pipeline(os.path.join(st_path, st_file))
-
-
+n_features = len(df_features.columns)
+n_components = np.arange(0, n_features, 5)  # options for n_components
 
 for X, title in [(df_features, "first file")]:
     pca_scores, fa_scores = compute_scores(X)
