@@ -83,7 +83,7 @@ def fit_and_predict(features, answers):
 
 
 # Craft the default specific path to the resources folder which holds the training and testing data
-st_path = os.path.join(os.getcwd(), 'resources', 'TrafficLabelling')
+st_path = os.path.join(os.getcwd(), 'resources')
 # Specify the training file
 # Webattacks
 # st_file = 'Friday-23-02-2018_TrafficForML_CICFlowMeter.csv'
@@ -118,7 +118,6 @@ test_data, test_answers, test_target_names = prep_pipeline(os.path.join(st_path,
 #                                                           random_state=42)
 # Training the model
 # Decision Tree Classifier - This is the key part of the code.
-# TODO build feature finding
 
 old_score = 0
 for x in powerset(BRUTEFORCE_FEATURES):
@@ -157,10 +156,3 @@ disp = ConfusionMatrixDisplay(confusion_matrix=cm,
 disp.plot()
 print('Confusion Matrix:\n{}'.format(cm))
 
-
-# if __name__ == "__main__":
-#     with concurrent.futures.ThreatPoolExecutor(max_workers=5) as executor:
-#         for x in powerset(BRUTEFORCE_FEATURES):
-#             if x == ():
-#                 continue
-#         executor.map(fit_and_predict(), x)
