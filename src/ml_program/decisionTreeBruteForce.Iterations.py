@@ -155,4 +155,3 @@ disp = ConfusionMatrixDisplay(confusion_matrix=cm,
                               display_labels=test_target_names)
 disp.plot()
 print('Confusion Matrix:\n{}'.format(cm))
-
