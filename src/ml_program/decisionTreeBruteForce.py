@@ -16,36 +16,36 @@ USE_TRAINED_MODEL = False  # Change this for training vs using existing model
 # The list of features for detecting bruteforce (FTP/SSH) attacks.
 BRUTEFORCE_FEATURES = ['Dst Port',
                        'Protocol',
-                       # 'Flow Duration',
+                       'Flow Duration',
                        'Tot Fwd Pkts',
-                       # 'Tot Bwd Pkts',
+                       'Tot Bwd Pkts',
                        'TotLen Fwd Pkts',
-                       # 'TotLen Bwd Pkts',
+                       'TotLen Bwd Pkts',
                        'Flow Byts/s',
                        'Flow Pkts/s',
-                       # 'Fwd IAT Tot',
-                       # 'Bwd IAT Tot',
-                       # 'Fwd PSH Flags',
+                       'Fwd IAT Tot',
+                       'Bwd IAT Tot',
+                       'Fwd PSH Flags',
                        # 'Bwd PSH Flags',
-                       # 'Fwd URG Flags',
+                       'Fwd URG Flags',
                        # 'Bwd URG Flags',
-                       'Fwd Header Len',
-                       'Bwd Header Len',
-                       # 'Fwd Pkts/s',
-                       # 'Bwd Pkts/s',
+                       # 'Fwd Header Len',
+                       # 'Bwd Header Len',
+                       'Fwd Pkts/s',
+                       'Bwd Pkts/s',
                        'FIN Flag Cnt',
                        'SYN Flag Cnt',
                        'RST Flag Cnt',
                        'PSH Flag Cnt',
                        'ACK Flag Cnt',
                        'URG Flag Cnt',
-                       'CWE Flag Count',
-                       'ECE Flag Cnt',
+                       # 'CWE Flag Cnt',
+                       # 'ECE Flag Cnt',
                        'Down/Up Ratio',
-                       'Subflow Fwd Pkts',
-                       'Subflow Fwd Byts',
-                       'Subflow Bwd Pkts',
-                       'Subflow Bwd Byts',
+                       # 'Subflow Fwd Pkts',
+                       # 'Subflow Fwd Byts',
+                       # 'Subflow Bwd Pkts',
+                       # 'Subflow Bwd Byts',
                        'Init Fwd Win Byts',
                        'Init Bwd Win Byts',
                        'Fwd Act Data Pkts',
@@ -54,8 +54,6 @@ BRUTEFORCE_FEATURES = ['Dst Port',
 
 
 def prep_pipeline(filename, encoding='utf_8'):
-    # pre-process and clean dataset
-    pass
     # Read the CSV file using pandas
     data = pd.read_csv(filename, encoding=encoding)
     data = util.fix_headers(data)
@@ -99,34 +97,33 @@ df_features, df_targets, df_target_names = prep_pipeline(os.path.join(st_path, s
 if USE_TRAINED_MODEL:
     # Load pretrained Decision Tree Classifier
     clf = load('decisionTree_BruteForce.joblib.backup')
-    prediction_test = clf.predict(df_features)
-    true_test = df_targets  # rename for classification_report
 else:
     # Build new training data
-    X_train, X_test, true_train, true_test = train_test_split(df_features,
-                                                              df_targets,
-                                                              test_size=0.5,
-                                                              random_state=42)
+    # X_train, X_test, true_train, true_test = train_test_split(df_features,
+    #                                                           df_targets,
+    #                                                           test_size=0.6,
+    #                                                           random_state=42)
     # Training the model
     # Decision Tree Classifier - This is the key part of the code.
-    clf = DecisionTreeClassifier(max_depth=5)
-    clf.fit(X_train, true_train)
+    clf = DecisionTreeClassifier()
+    clf.fit(df_features, df_targets)
     dump(clf, 'decisionTree_BruteForce.joblib')
-    # Testing the Model - Predictions and Evaluations
-    prediction_test = clf.predict(X_test)  # Test split data
 
-print('***** Classification Test Report *****\n{}\n**********'.format(classification_report(true_test,
-                                                                                            prediction_test,
-                                                                                            target_names=df_target_names)))
+# Testing the Model - Predictions and Evaluations
+# prediction_test = clf.predict(df_features)
+# true_test = df_targets  # rename for classification_report
+# print('***** Classification Test Report *****\n{}\n**********'.format(classification_report(true_test,
+#                                                                                             prediction_test,
+#                                                                                             target_names=df_target_names)))
 # Clear old variables and save memory
 df_features = None
 df_targets = None
 # Display Results - Confusion Matrix
-cm = confusion_matrix(true_test, prediction_test)
-disp = ConfusionMatrixDisplay(confusion_matrix=cm,
-                              display_labels=df_target_names)
-disp.plot()
-print('Confusion Matrix:\n{}'.format(cm))
+# cm = confusion_matrix(true_test, prediction_test)
+# disp = ConfusionMatrixDisplay(confusion_matrix=cm,
+#                               display_labels=df_target_names)
+# disp.plot()
+# print('Confusion Matrix:\n{}'.format(cm))
 
 # New file test
 test_features, test_targets, test_target_names = prep_pipeline(os.path.join(st_path, st_file_2), encoding)
