@@ -54,6 +54,8 @@ BRUTEFORCE_FEATURES = ['Dst Port',
                        'Fwd Act Data Pkts',
                        'Fwd Seg Size Min'
                        ]
+n_features = 80
+n_components = np.arange(0, n_features, 5)  # options for n_components
 
 
 def prep_pipeline(filename, encoding='utf_8'):
@@ -77,7 +79,7 @@ from sklearn.model_selection import GridSearchCV
 
 
 def compute_scores(X):
-    pca = PCA(svd_solver="full")
+    pca = PCA(svd_solver="auto")
     fa = FactorAnalysis()
 
     pca_scores, fa_scores = [], []
@@ -121,9 +123,9 @@ st_file_2 = 'Tuesday-WorkingHours.pcap_ISCX.csv'
 encoding = 'utf_8'
 
 df_features, df_targets, df_target_names = prep_pipeline(os.path.join(st_path, st_file))
-n_features = 80
 
-n_components = np.arange(0, n_features, 5)  # options for n_components
+
+
 for X, title in [(df_features, "first file")]:
     pca_scores, fa_scores = compute_scores(X)
     n_components_pca = n_components[np.argmax(pca_scores)]
