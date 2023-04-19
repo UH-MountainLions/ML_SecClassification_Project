@@ -126,6 +126,7 @@ for x in powerset(BRUTEFORCE_FEATURES):
         continue
     train_features = get_features_data(train_data, x)
     test_features = get_features_data(test_data, x)
+    print('Trying: {}'.format(x), end='\r')
     # Make predictions
     clf = DecisionTreeClassifier()
     try:
@@ -155,3 +156,11 @@ disp = ConfusionMatrixDisplay(confusion_matrix=cm,
                               display_labels=test_target_names)
 disp.plot()
 print('Confusion Matrix:\n{}'.format(cm))
+
+
+# if __name__ == "__main__":
+#     with concurrent.futures.ThreatPoolExecutor(max_workers=5) as executor:
+#         for x in powerset(BRUTEFORCE_FEATURES):
+#             if x == ():
+#                 continue
+#         executor.map(fit_and_predict(), x)
