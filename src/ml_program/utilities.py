@@ -5,44 +5,95 @@ Full license in LICENSE.md
 """
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
+import pandas as pd
 
 # Global dict to convert various headers into a central, common header structure.
-CONVERT_HEADERS = {"Dst Port": ["Destination Port"],
+DROP_HEADERS = ["Flow ID",
+                "Source IP",
+                "Source Port",
+                "Destination IP",
+                "Timestamp"
+                ]
+CONVERT_HEADERS = {"Destination Port": ["Dst Port"],
                    "Protocol": ["Protocol"],
+                   "Timestamp": ["Timestamp"],
                    "Flow Duration": ["Flow Duration"],
-                   "Tot Fwd Pkts": ["Total Fwd Packets"],
-                   "Tot Bwd Pkts": ["Total Backward Packets"],
-                   "TotLen Fwd Pkts": ["Total Length of Fwd Packets"],
-                   "TotLen Bwd Pkts": ["Total Length of Bwd Packets"],
-                   "Flow Byts/s": ["Flow Bytes/s"],
-                   "Flow Pkts/s": ["Flow Packets/s"],
-                   "Fwd IAT Tot": ["Fwd IAT Total"],
-                   "Bwd IAT Tot": ["Bwd IAT Total"],
+                   "Total Fwd Packets": ["Tot Fwd Pkts"],
+                   "Total Backward Packets": ["Tot Bwd Pkts"],
+                   "Total Length of Fwd Packets": ["TotLen Fwd Pkts"],
+                   "Total Length of Bwd Packets": ["TotLen Bwd Pkts"],
+                   "Fwd Packet Length Max": ["Fwd Pkt Len Max"],
+                   "Fwd Packet Length Min": ["Fwd Pkt Len Min"],
+                   "Fwd Packet Length Mean": ["Fwd Pkt Len Mean"],
+                   "Fwd Packet Length Std": ["Fwd Pkt Len Std"],
+                   "Bwd Packet Length Max": ["Bwd Pkt Len Max"],
+                   "Bwd Packet Length Min": ["Bwd Pkt Len Min"],
+                   "Bwd Packet Length Mean": ["Bwd Pkt Len Mean"],
+                   "Bwd Packet Length Std": ["Bwd Pkt Len Std"],
+                   "Flow Bytes/s": ["Flow Byts/s"],
+                   "Flow Packets/s": ["Flow Pkts/s"],
+                   "Flow IAT Mean": ["Flow IAT Mean"],
+                   "Flow IAT Std": ["Flow IAT Std"],
+                   "Flow IAT Max": ["Flow IAT Max"],
+                   "Flow IAT Min": ["Flow IAT Min"],
+                   "Fwd IAT Total": ["Fwd IAT Tot"],
+                   "Fwd IAT Mean": ["Fwd IAT Mean"],
+                   "Fwd IAT Std": ["Fwd IAT Std"],
+                   "Fwd IAT Max": ["Fwd IAT Max"],
+                   "Fwd IAT Min": ["Fwd IAT Min"],
+                   "Bwd IAT Total": ["Bwd IAT Tot"],
+                   "Bwd IAT Mean": ["Bwd IAT Mean"],
+                   "Bwd IAT Std": ["Bwd IAT Std"],
+                   "Bwd IAT Max": ["Bwd IAT Max"],
+                   "Bwd IAT Min": ["Bwd IAT Min"],
                    "Fwd PSH Flags": ["Fwd PSH Flags"],
                    "Bwd PSH Flags": ["Bwd PSH Flags"],
                    "Fwd URG Flags": ["Fwd URG Flags"],
                    "Bwd URG Flags": ["Bwd URG Flags"],
-                   "Fwd Header Len": ["Fwd Header Length"],
-                   "Bwd Header Len": ["Bwd Header Length"],
-                   "Fwd Pkts/s": ["Fwd Packets/s"],
-                   "Bwd Pkts/s": ["Bwd Packets/s"],
-                   "FIN Flag Cnt": ["FIN Flag Count"],
-                   "SYN Flag Cnt": ["SYN Flag Count"],
-                   "RST Flag Cnt": ["RST Flag Count"],
-                   "PSH Flag Cnt": ["PSH Flag Count"],
-                   "ACK Flag Cnt": ["ACK Flag Count"],
-                   "URG Flag Cnt": ["URG Flag Count"],
-                   "CWE Flag Cnts": ["CWE Flag Count"],
-                   "ECE Flag Cnt": ["ECE Flag Count"],
+                   "Fwd Header Length": ["Fwd Header Len"],
+                   "Fwd Header Length.1": ["Fwd Header Length.1"],
+                   "Bwd Header Length": ["Bwd Header Len"],
+                   "Fwd Packets/s": ["Fwd Pkts/s"],
+                   "Bwd Packets/s": ["Bwd Pkts/s"],
+                   "Min Packet Length": ["Pkt Len Min"],
+                   "Max Packet Length": ["Pkt Len Max"],
+                   "Packet Length Mean": ["Pkt Len Mean"],
+                   "Packet Length Std": ["Pkt Len Std"],
+                   "Packet Length Variance": ["Pkt Len Var"],
+                   "FIN Flag Count": ["FIN Flag Cnt"],
+                   "SYN Flag Count": ["SYN Flag Cnt"],
+                   "RST Flag Count": ["RST Flag Cnt"],
+                   "PSH Flag Count": ["PSH Flag Cnt"],
+                   "ACK Flag Count": ["ACK Flag Cnt"],
+                   "URG Flag Count": ["URG Flag Cnt"],
+                   "CWE Flag Count": ["CWE Flag Count"],
+                   "ECE Flag Count": ["ECE Flag Cnt"],
                    "Down/Up Ratio": ["Down/Up Ratio"],
-                   "Subflow Fwd Pkts": ["Subflow Fwd Packets"],
-                   "Subflow Fwd Byts": ["Subflow Fwd Bytes"],
-                   "Subflow Bwd Pkts": ["Subflow Bwd Packets"],
-                   "Subflow Bwd Byts": ["Subflow Bwd Bytes"],
+                   "Avg Packet Size": ["Pkt Size Avg", "Average Packet Size"],
+                   "Avg Fwd Segment Size": ["Fwd Seg Size Avg"],
+                   "Avg Bwd Segment Size": ["Bwd Seg Size Avg"],
+                   "Fwd Avg Bytes/Bulk": ["Fwd Byts/b Avg"],
+                   "Fwd Avg Packets/Bulk": ["Fwd Pkts/b Avg"],
+                   "Fwd Avg Bulk Rate": ["Fwd Blk Rate Avg"],
+                   "Bwd Avg Bytes/Bulk": ["Bwd Byts/b Avg"],
+                   "Bwd Avg Packets/Bulk": ["Bwd Pkts/b Avg"],
+                   "Bwd Avg Bulk Rate": ["Bwd Blk Rate Avg"],
+                   "Subflow Fwd Packets": ["Subflow Fwd Pkts"],
+                   "Subflow Fwd Bytes": ["Subflow Fwd Byts"],
+                   "Subflow Bwd Packets": ["Subflow Bwd Pkts"],
+                   "Subflow Bwd Bytes": ["Subflow Bwd Byts"],
                    "Init Fwd Win Byts": ["Init_Win_bytes_forward"],
                    "Init Bwd Win Byts": ["Init_Win_bytes_backward"],
                    "Fwd Act Data Pkts": ["act_data_pkt_fwd"],
                    "Fwd Seg Size Min": ["min_seg_size_forward"],
+                   "Active Mean": ["Active Mean"],
+                   "Active Std": ["Active Std"],
+                   "Active Max": ["Active Max"],
+                   "Active Min": ["Active Min"],
+                   "Idle Mean": ["Idle Mean"],
+                   "Idle Std": ["Idle Std"],
+                   "Idle Max": ["Idle Max"],
+                   "Idle Min": ["Idle Min"],
                    "Label": ["Label"]
                    }
 
@@ -78,11 +129,9 @@ def fix_headers(data):
         fix_lst.append(column.strip())
     res_dct = {old_lst[i]: fix_lst[i] for i in range(len(data.columns))}  # Build converting dict for DataFrame.Rename
     data = data.rename(res_dct, axis='columns')
-
     # Convert any headers according to the CONVERT_HEADERS dict.
     old_lst = []
     fix_lst = []
-    red_dct = None
     for column in data.columns:
         for header in CONVERT_HEADERS:
             if column in CONVERT_HEADERS[header]:
@@ -90,6 +139,8 @@ def fix_headers(data):
                 fix_lst.append(header)
     res_dct = {old_lst[i]: fix_lst[i] for i in range(len(old_lst))}  # Build converting dict for DataFrame.Rename
     data = data.rename(res_dct, axis='columns')
+    # Drop useless headers
+    data.drop(DROP_HEADERS, axis='columns', errors='ignore', inplace=True)
     return data
 
 
@@ -117,6 +168,22 @@ def get_targets_int(data, column='Label'):
     target_names = get_target_names(data)
     # `dataframe.map(<dict>)` works with dict `{"what you have": "what you want it to become"}`
     return data[column].map(convert(target_names))
+
+
+def prep_pipeline(filename, features=None, encoding='utf_8', ):
+    # Read the CSV file using pandas
+    data = pd.read_csv(filename, encoding=encoding)
+    data = fix_headers(data)
+    target_names = get_target_names(data)
+    feature_data = data_training_prep(data)  # clean and prep all data
+    # grab test answers
+    answer_key = get_targets_int(data)  # grab test answers before they are purged
+    data.drop('Label', axis='columns', inplace=True)
+    # Grab only columns needed
+    if features is not None:
+        feature_data = feature_data.filter(features, axis='columns')
+    assert len(answer_key) == len(feature_data)
+    return feature_data, answer_key, target_names
 
 
 def data_training_prep(data):
