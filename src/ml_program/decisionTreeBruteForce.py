@@ -14,7 +14,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-USE_TRAINED_MODEL = True  # Change this for training vs using existing model
 MODEL_FILE = 'decisionTree_BruteForce.joblib.2049'
 # The list of features for detecting bruteforce (FTP/SSH) attacks.
 BRUTEFORCE_FEATURES = ['Fwd Packet Length Mean',
@@ -121,8 +120,9 @@ encoding = 'utf_8'
 # ***************************************
 # MODELING
 # ***************************************
+RESAMPLE = True
+USE_TRAINED_MODEL = False  # Change this for training vs using existing model
 # Split the data into training and testing sets
-
 if USE_TRAINED_MODEL:
     # Load pretrained Decision Tree Classifier
     clf = load(MODEL_FILE)
@@ -130,6 +130,8 @@ else:
     df_features, df_targets, df_target_names = util.prep_pipeline(os.path.join(st_path, st_file),
                                                                   BRUTEFORCE_FEATURES,
                                                                   encoding)
+    if RESAMPLE:
+        df_features, df_targets = util.resample(df_features, df_targets)
     # Build new training data
     X_train, X_test, true_train, true_test = train_test_split(df_features,
                                                               df_targets,
@@ -143,6 +145,7 @@ else:
     # Testing the Model - Predictions and Evaluations
     prediction_test = clf.predict(X_test)
 
+# *******************************************************************
 # Clear old variables and save memory
 df_features = None
 df_targets = None
