@@ -1,19 +1,24 @@
 # -*- coding: utf-8 -*-
-"""shared utilities for supervised learning algorithm for classification and regression.
+"""shared utilities for supervised learning algorithm for classification.
 
 Full license in LICENSE.md
 """
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
 import pandas as pd
+from imblearn.pipeline import Pipeline
+from imblearn.over_sampling import RandomOverSampler
+from imblearn.under_sampling import RandomUnderSampler
 
-# Global dict to convert various headers into a central, common header structure.
+# List of headers that are not required
 DROP_HEADERS = ["Flow ID",
                 "Source IP",
                 "Source Port",
                 "Destination IP",
                 "Timestamp"
                 ]
+# Global dict to convert various headers into a central, common header structure.
+# in the structure of {"str_to_be_changed_to": ["str_to_look_for_to_change_from"]
 CONVERT_HEADERS = {"Destination Port": ["Dst Port"],
                    "Protocol": ["Protocol"],
                    "Timestamp": ["Timestamp"],
@@ -105,7 +110,7 @@ def convert(lst):
     e.g., ['one', 'two', 'three'] returns {'one': 0, 'two': 1, 'three': 2}
     This is required for DataFrame mapping of values from string to an integer in order of appearance.
 
-    :param lst: list to convert into a dict
+    :param lst: (list) to convert into a dict
     :return: (dict)
     """
     res_dct = {lst[i]: i for i in range(0, len(lst))}
@@ -144,15 +149,36 @@ def fix_headers(data):
     return data
 
 
+def resample(data, answers):
+    """
+
+    :param data: (pandas.DataFrame) dataframe without answer key.
+    :param answers: (list) of answers from the original dataframe
+    :return: (tuple) 0: list of transformed samples
+                     1: list of transformed target
+    """
+    assert len(data) == len(answers)  # sanity check
+    # Define the oversampling and undersampling methods
+    over_sampler = RandomOverSampler(sampling_strategy='auto')
+    under_sampler = RandomUnderSampler(sampling_strategy='auto')
+
+    # Create a pipeline for resampling
+    pipeline = Pipeline(steps=[('o', over_sampler), ('u', under_sampler)])
+
+    # Fit and transform the dataset using the pipeline
+    return pipeline.fit_resample(data, answers)
+
+
 def get_target_names(data, column: str = 'Label') -> list:
     """Build a list of unique values from the 'answer key' column for supervised learning.
 
-    This method was built to get a list of target labels for supervised learning. The dataframe will return the target
-    values in the order they first appear and build an
+    This method was built to get a list of target labels for supervised learning. The dataframe will
+    return the target values in the order they first appear and build an
 
     :param data: (pandas.DataFrame) Initial dataset which still has the "answer key" attached.
     :param column: (str) Column name that contains supervised training answers
-    :return: (list) List of unique values from 'answer key' in order that they first appear in data set.
+    :return: (list) List of unique values from 'answer key' in order that they first appear in data
+             set.
     """
     return np.unique(data[column].dropna())
 
@@ -160,9 +186,11 @@ def get_target_names(data, column: str = 'Label') -> list:
 def get_targets_int(data, column='Label'):
     """Get the list of target values from the Label column
 
-    Grabs just the supervised training results, and maps it as an ordered integer according to the "get_target_names"
-    method.
+    Grabs just the supervised training results, and maps it as an ordered integer according to the
+    "get_target_names" method.
 
+    :param data: (pandas.DataFrame) raw Dataframe with answers still included
+    :param column: (str) name of the column in the DataFrame where the answers are stored
     :return: (list) values from `Label` column mapped as integer values.
     """
     target_names = get_target_names(data)
@@ -170,11 +198,20 @@ def get_targets_int(data, column='Label'):
     return data[column].map(convert(target_names))
 
 
-def prep_pipeline(filename, features=None, encoding='utf_8', ):
+def prep_pipeline(filename: str, features: list=None, encoding: str='utf_8' ):
+    """
+
+    :param filename: (str) full path of the csv file to import
+    :param features: (list) List of features to select out of the csv file.
+    :param encoding: (str) different encoding if needed.
+    :return: (tuple) of 0: pandas.Dataframe of all data (minus answers);
+                      1: List of all training answers
+                      2: List of unique answers in order of appearance in raw data
+    """
     # Read the CSV file using pandas
     data = pd.read_csv(filename, encoding=encoding)
     data = fix_headers(data)
-    target_names = get_target_names(data)
+    target_names = get_target_names(data)  # Get training data results
     feature_data = data_training_prep(data)  # clean and prep all data
     # grab test answers
     answer_key = get_targets_int(data)  # grab test answers before they are purged
