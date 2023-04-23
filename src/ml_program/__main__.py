@@ -18,6 +18,7 @@ import logging
 logger = logging.getLogger('')
 logger.setLevel(logging.DEBUG)
 
+def load_file()
 
 def main_cli() -> None:
     """Entrypoint for application.
@@ -35,7 +36,7 @@ def main_cli() -> None:
                         help='Set logging level (debug, info, warning, error, critical)')
     parser.add_argument('-tf', '--training_file',
                         default=None,
-                        dest="csv_file",
+                        dest="training_file",
                         help='CSV file to process')
     args = parser.parse_args()
 
@@ -49,10 +50,10 @@ def main_cli() -> None:
     file_handler = logging.FileHandler(os.path.join(os.path.dirname(__file__),
                                                     'debug.log')
                                        )
-    file_handler.setLevel(logging.DEBUG)
+    # file_handler.setLevel(logging.DEBUG)
     # Create console handler
     console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.DEBUG)
+    # console_handler.setLevel(logging.DEBUG)
     # Build formatters
     file_format = logging.Formatter("%(asctime)s::%(name)s::%(pathname)s(%(lineno)s) - %(message)s")
     con_format = logging.Formatter("%(name)s::%(levelname)s - %(message)s")
@@ -64,9 +65,12 @@ def main_cli() -> None:
     logger.addHandler(console_handler)
 
     # Run program
-    if args.csv_file:
-        # TODO setup easy CLI process
+    if args.training_file:
         print('Not currently implemented!')
+        # Data Preprocess
+
+        # If Training
+        # Move on to predicting
     else:
         pass
 
