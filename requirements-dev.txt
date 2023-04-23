@@ -10,4 +10,6 @@ pip==23.0.1
 setuptools==67.2
 build==0.10.0
 bump2version @ git+https://github.com/c4urself/bump2version@bc95374d0dff73e610bed520846f88859815e532
+seaborn==0.12.2
+imblearn==0.0
 # bump2version ==1.0.1
