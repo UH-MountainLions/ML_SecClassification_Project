@@ -13,9 +13,9 @@ import utilities as util
 import numpy as np
 from matplotlib import pyplot as plt
 
-
-MODEL_FILE = 'decisionTree_BruteForce.joblib.2049'
+MODEL_FILE = 'decisionTree_BruteForce.joblib'
 # The list of features for detecting bruteforce (FTP/SSH) attacks.
+# BRUTEFORCE_V1
 BRUTEFORCE_FEATURES = ['Fwd Packet Length Mean',
                           'Down/Up Ratio',
                           'Fwd Packet Length Max',
@@ -78,7 +78,8 @@ BRUTEFORCE_FEATURES = ['Fwd Packet Length Mean',
                           'Flow IAT Std',
                           'Idle Mean'
                           ]
-BRUTEFORCE_FEATURES_V2 = ['Destination Port', 'Protocol', 'Flow Duration', 'Total Fwd Packets'
+# BRUTEFORCE_V3
+BRUTEFORCE_FEATURES_V3 = ['Destination Port', 'Protocol', 'Flow Duration', 'Total Fwd Packets'
  'Total Backward Packets', 'Total Length of Fwd Packets'
  'Total Length of Bwd Packets', 'Fwd Packet Length Max'
  'Fwd Packet Length Min', 'Fwd Packet Length Mean', 'Fwd Packet Length Std'
@@ -90,12 +91,12 @@ BRUTEFORCE_FEATURES_V2 = ['Destination Port', 'Protocol', 'Flow Duration', 'Tota
  'Fwd Header Length', 'Bwd Header Length', 'Fwd Packets/s', 'Bwd Packets/s'
  'Min Packet Length', 'Max Packet Length', 'Packet Length Mean'
  'Packet Length Std', 'Packet Length Variance', 'PSH Flag Count'
- 'ACK Flag Count', 'Down/Up Ratio', 'Avg Packet Size', 'Avg Fwd Segment Size'
- 'Avg Bwd Segment Size', 'Subflow Fwd Packets', 'Subflow Fwd Bytes'
- 'Subflow Bwd Packets', 'Subflow Bwd Bytes', 'Init Fwd Win Byts'
- 'Init Bwd Win Byts', 'Fwd Act Data Pkts', 'Fwd Seg Size Min', 'Active Mean'
- 'Active Std', 'Active Max', 'Active Min', 'Idle Mean', 'Idle Std', 'Idle Max'
- 'Idle Min']
+ 'ACK Flag Count', 'URG Flag Count', 'Down/Up Ratio', 'Avg Packet Size'
+ 'Avg Fwd Segment Size', 'Avg Bwd Segment Size', 'Subflow Fwd Packets'
+ 'Subflow Fwd Bytes', 'Subflow Bwd Packets', 'Subflow Bwd Bytes'
+ 'Init Fwd Win Byts', 'Init Bwd Win Byts', 'Fwd Act Data Pkts'
+ 'Fwd Seg Size Min', 'Active Mean', 'Active Std', 'Active Max', 'Active Min'
+ 'Idle Mean', 'Idle Std', 'Idle Max', 'Idle Min']
 
 # Craft the default specific path to the resources folder which holds the training and testing data
 st_path = os.path.join(os.getcwd(), 'resources', 'TrafficLabelling')
@@ -106,8 +107,8 @@ st_path = os.path.join(os.getcwd(), 'resources', 'TrafficLabelling')
 # DDos
 # st_file = 'Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv'
 # Brute force
-st_file = 'Wednesday-14-02-2018_TrafficForML_CICFlowMeter.csv'
-st_file_2 = 'Tuesday-WorkingHours.pcap_ISCX.csv'
+st_file_2 = 'Wednesday-14-02-2018_TrafficForML_CICFlowMeter.csv'
+st_file = 'Tuesday-WorkingHours.pcap_ISCX.csv'
 # Misc
 # st_file = 'Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv'
 # st_file = 'Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv'
@@ -121,47 +122,50 @@ encoding = 'utf_8'
 # MODELING
 # ***************************************
 RESAMPLE = True
-USE_TRAINED_MODEL = False  # Change this for training vs using existing model
+USE_TRAINED_MODEL = True  # Change this for training vs using existing model
 # Split the data into training and testing sets
 if USE_TRAINED_MODEL:
     # Load pretrained Decision Tree Classifier
     clf = load(MODEL_FILE)
+    # New file test
+    X_test, y_test, test_target_names = util.prep_pipeline(os.path.join(st_path, st_file),
+                                                           BRUTEFORCE_FEATURES,
+                                                           encoding)
+    # Make predictions
+    prediction_test = clf.predict(X_test)
+    print('*** Classification Load Test Report ***\n{}\n******'.format(classification_report(y_test,
+                                                                                             prediction_test,
+                                                                                             target_names=test_target_names)
+                                                                       )
+          )
 else:
-    df_features, df_targets, df_target_names = util.prep_pipeline(os.path.join(st_path, st_file),
-                                                                  BRUTEFORCE_FEATURES,
-                                                                  encoding)
+    X_train, y_train, target_names = util.prep_pipeline(os.path.join(st_path, st_file),
+                                                        BRUTEFORCE_FEATURES,
+                                                        encoding)
     if RESAMPLE:
-        df_features, df_targets = util.resample(df_features, df_targets)
+        X_train, y_train = util.resample(X_train, y_train)
     # Build new training data
-    X_train, X_test, true_train, true_test = train_test_split(df_features,
-                                                              df_targets,
-                                                              test_size=0.3,
-                                                              random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X_train,
+                                                        y_train,
+                                                        test_size=0.33,
+                                                        random_state=42)
     # Training the model
     # Decision Tree Classifier - This is the key part of the code.
     clf = DecisionTreeClassifier()
-    clf.fit(X_train, true_train)
-    dump(clf, '../ml_program.V2.2104/decisionTree_BruteForce.joblib')
+    clf.fit(X_train, y_train)
+    dump(clf, MODEL_FILE)
+
     # Testing the Model - Predictions and Evaluations
     prediction_test = clf.predict(X_test)
+    print('*** Classification TRAIN Report ***\n{}\n******'.format(classification_report(y_test,
+                                                                                         prediction_test,
+                                                                                         target_names=target_names)))
 
 # *******************************************************************
-# Clear old variables and save memory
-df_features = None
-df_targets = None
-# Display Results - Confusion Matrix
-# cm = confusion_matrix(true_test, prediction_test)
-# disp = ConfusionMatrixDisplay(confusion_matrix=cm,
-#                               display_labels=df_target_names)
-# disp.plot()
-# print('Confusion Matrix:\n{}'.format(cm))
-
 # New file test
 test_features, test_targets, test_target_names = util.prep_pipeline(os.path.join(st_path, st_file_2),
                                                                     BRUTEFORCE_FEATURES,
                                                                     encoding)
-
-
 # Make predictions
 prediction_test = clf.predict(test_features)
 print('*** Classification RUN Report ***\n{}\n******'.format(classification_report(test_targets,

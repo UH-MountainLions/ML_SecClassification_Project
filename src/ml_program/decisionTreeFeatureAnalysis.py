@@ -4,15 +4,8 @@
 Full license in LICENSE.md
 """
 import os
-from joblib import dump, load
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
 import utilities as util
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA, IncrementalPCA
 from sklearn.feature_selection import VarianceThreshold
 
 from sklearn.decomposition import PCA, FactorAnalysis
@@ -48,13 +41,13 @@ def lw_score(x):
 st_path = os.path.join(os.getcwd(), 'resources', 'TrafficLabelling')
 # Specify the training file
 # Webattacks
-# st_file = 'Friday-23-02-2018_TrafficForML_CICFlowMeter.csv'
-# st_file_2 = 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
+st_file = 'Friday-23-02-2018_TrafficForML_CICFlowMeter.csv'
+st_file_2 = 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
 # DDos
 # st_file = 'Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv'
 # Brute force
-st_file_2 = 'Wednesday-14-02-2018_TrafficForML_CICFlowMeter.csv'
-st_file = 'Tuesday-WorkingHours.pcap_ISCX.csv'
+# st_file_2 = 'Wednesday-14-02-2018_TrafficForML_CICFlowMeter.csv'
+# st_file = 'Tuesday-WorkingHours.pcap_ISCX.csv'
 # Misc
 # st_file = 'Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv'
 # st_file = 'Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv'
@@ -66,10 +59,14 @@ encoding = 'utf_8'
 
 # Load file
 df_features, df_targets, df_target_names = util.prep_pipeline(os.path.join(st_path, st_file))
+df_features, df_targets = util.resample(df_features, df_targets)
 # Variance Check
-sel = VarianceThreshold(threshold=(.8 * (1 - .8)))
+threshold = .8
+sel = VarianceThreshold(threshold=(threshold * (1 - threshold)))
 sel.fit_transform(df_features)
 print(sel.get_feature_names_out())
+
+exit()
 
 # PCA
 for x in df_features.columns:
@@ -90,3 +87,6 @@ for X, title in [(df_features, "first file")]:
     print("best n_components by PCA CV = %d" % n_components_pca)
     print("best n_components by FactorAnalysis CV = %d" % n_components_fa)
     print("best n_components by PCA MLE = %d" % n_components_pca_mle)
+
+if __name__ == '__main__':
+    print('Hommie don\'t play that')

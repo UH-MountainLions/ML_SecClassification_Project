@@ -15,6 +15,7 @@ DROP_HEADERS = ["Flow ID",
                 "Source IP",
                 "Source Port",
                 "Destination IP",
+                "Fwd Header Length.1",
                 "Timestamp"
                 ]
 # Global dict to convert various headers into a central, common header structure.
@@ -163,10 +164,16 @@ def resample(data, answers):
     under_sampler = RandomUnderSampler(sampling_strategy='auto')
 
     # Create a pipeline for resampling
-    pipeline = Pipeline(steps=[('o', over_sampler), ('u', under_sampler)])
+    pipeline = Pipeline(steps=[('o', over_sampler),
+                               ('u', under_sampler)])
+    X_resampled, y_resampled = pipeline.fit_resample(data, answers)
+
+    unique, counts = np.unique(y_resampled, return_counts=True)
+    new_class_distribution = dict(zip(unique, counts))
+    print('new_class_distribution:', new_class_distribution)
 
     # Fit and transform the dataset using the pipeline
-    return pipeline.fit_resample(data, answers)
+    return X_resampled, y_resampled
 
 
 def get_target_names(data, column: str = 'Label') -> list:
@@ -209,7 +216,7 @@ def prep_pipeline(filename: str, features: list=None, encoding: str='utf_8' ):
                       2: List of unique answers in order of appearance in raw data
     """
     # Read the CSV file using pandas
-    data = pd.read_csv(filename, encoding=encoding)
+    data = pd.read_csv(filename, encoding=encoding, encoding_errors='ignore')
     data = fix_headers(data)
     target_names = get_target_names(data)  # Get training data results
     feature_data = data_training_prep(data)  # clean and prep all data
