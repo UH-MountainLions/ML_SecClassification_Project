@@ -13,7 +13,7 @@ import utilities as util
 import numpy as np
 from matplotlib import pyplot as plt
 
-MODEL_FILE = 'decisionTree_BruteForce.joblib'
+MODEL_FILE = 'decisionTree.BruteForce.joblib'
 # The list of features for detecting bruteforce (FTP/SSH) attacks.
 # BRUTEFORCE_V1
 BRUTEFORCE_FEATURES = ['Fwd Packet Length Mean',
@@ -99,7 +99,7 @@ BRUTEFORCE_FEATURES_V3 = ['Destination Port', 'Protocol', 'Flow Duration', 'Tota
  'Idle Mean', 'Idle Std', 'Idle Max', 'Idle Min']
 
 # Craft the default specific path to the resources folder which holds the training and testing data
-st_path = os.path.join(os.getcwd(), 'resources', 'TrafficLabelling')
+st_path = os.path.join(os.getcwd(), 'resources')
 # Specify the training file
 # Webattacks
 # st_file = 'Friday-23-02-2018_TrafficForML_CICFlowMeter.csv'
@@ -122,7 +122,7 @@ encoding = 'utf_8'
 # MODELING
 # ***************************************
 RESAMPLE = True
-USE_TRAINED_MODEL = True  # Change this for training vs using existing model
+USE_TRAINED_MODEL = False  # Change this for training vs using existing model
 # Split the data into training and testing sets
 if USE_TRAINED_MODEL:
     # Load pretrained Decision Tree Classifier
