@@ -247,11 +247,13 @@ def data_training_prep(data):
     le = LabelEncoder()
     for col in data.columns:
         if data[col].dtypes not in ['int64', 'float64']:
-            data[col] = le.fit_transform(data[col])
             if data[col].dtype == 'int32':
                 data[col] = data[col].astype('int64')
+                continue
             elif data[col].dtype == 'float32':
                 data[col] = data[col].astype('float64')
+            else:
+                data[col] = le.fit_transform(data[col])
 
     # Search for the columns with infinite values
     lt_columns = data[data.columns[data.max() == np.inf]].columns

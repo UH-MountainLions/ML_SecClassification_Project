@@ -52,24 +52,23 @@ WEBATTACK_FEATURES = ['Dst Port',
                       'Fwd Act Data Pkts',
                       'Fwd Seg Size Min'
                       ]
-WEBATTACK_FEATURES_V2 = ['Destination Port', 'Protocol', 'Flow Duration', 'Total Fwd Packets'
- 'Total Backward Packets', 'Total Length of Fwd Packets'
- 'Total Length of Bwd Packets', 'Fwd Packet Length Max'
- 'Fwd Packet Length Min', 'Fwd Packet Length Mean', 'Fwd Packet Length Std'
- 'Bwd Packet Length Max', 'Bwd Packet Length Min', 'Bwd Packet Length Mean'
- 'Bwd Packet Length Std', 'Flow Bytes/s', 'Flow Packets/s', 'Flow IAT Mean'
- 'Flow IAT Std', 'Flow IAT Max', 'Flow IAT Min', 'Fwd IAT Total'
- 'Fwd IAT Mean', 'Fwd IAT Std', 'Fwd IAT Max', 'Fwd IAT Min', 'Bwd IAT Total'
- 'Bwd IAT Mean', 'Bwd IAT Std', 'Bwd IAT Max', 'Bwd IAT Min'
- 'Fwd Header Length', 'Bwd Header Length', 'Fwd Packets/s', 'Bwd Packets/s'
- 'Min Packet Length', 'Max Packet Length', 'Packet Length Mean'
- 'Packet Length Std', 'Packet Length Variance', 'RST Flag Count'
- 'PSH Flag Count', 'ACK Flag Count', 'ECE Flag Count', 'Down/Up Ratio'
- 'Avg Packet Size', 'Avg Fwd Segment Size', 'Avg Bwd Segment Size'
- 'Subflow Fwd Packets', 'Subflow Fwd Bytes', 'Subflow Bwd Packets'
- 'Subflow Bwd Bytes', 'Init Fwd Win Byts', 'Init Bwd Win Byts'
- 'Fwd Act Data Pkts', 'Fwd Seg Size Min', 'Active Mean', 'Active Std'
- 'Active Max', 'Active Min', 'Idle Mean', 'Idle Std', 'Idle Max', 'Idle Min']
+WEBATTACK_FEATURES_V2 = ['Destination Port' 'Protocol' 'Flow Duration' 'Total Fwd Packets'
+ 'Total Backward Packets' 'Total Length of Fwd Packets'
+ 'Total Length of Bwd Packets' 'Fwd Packet Length Max'
+ 'Fwd Packet Length Min' 'Fwd Packet Length Mean' 'Fwd Packet Length Std'
+ 'Bwd Packet Length Max' 'Bwd Packet Length Min' 'Bwd Packet Length Mean'
+ 'Bwd Packet Length Std' 'Flow Bytes/s' 'Flow Packets/s' 'Flow IAT Mean'
+ 'Flow IAT Std' 'Flow IAT Max' 'Flow IAT Min' 'Fwd IAT Total'
+ 'Fwd IAT Mean' 'Fwd IAT Std' 'Fwd IAT Max' 'Fwd IAT Min' 'Bwd IAT Total'
+ 'Bwd IAT Mean' 'Bwd IAT Std' 'Bwd IAT Max' 'Bwd IAT Min'
+ 'Fwd Header Length' 'Bwd Header Length' 'Fwd Packets/s' 'Bwd Packets/s'
+ 'Min Packet Length' 'Max Packet Length' 'Packet Length Mean'
+ 'Packet Length Std' 'Packet Length Variance' 'Avg Packet Size'
+ 'Avg Fwd Segment Size' 'Avg Bwd Segment Size' 'Subflow Fwd Packets'
+ 'Subflow Fwd Bytes' 'Subflow Bwd Packets' 'Subflow Bwd Bytes'
+ 'Init Fwd Win Byts' 'Init Bwd Win Byts' 'Fwd Act Data Pkts'
+ 'Fwd Seg Size Min' 'Active Mean' 'Active Std' 'Active Max' 'Active Min'
+ 'Idle Mean' 'Idle Std' 'Idle Max' 'Idle Min']
 
 # Craft the default specific path to the resources folder which holds the training and testing data
 st_path = os.path.join(os.getcwd(), 'resources', 'TrafficLabelling')

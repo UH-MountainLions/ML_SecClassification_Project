@@ -61,10 +61,12 @@ encoding = 'utf_8'
 df_features, df_targets, df_target_names = util.prep_pipeline(os.path.join(st_path, st_file))
 df_features, df_targets = util.resample(df_features, df_targets)
 # Variance Check
-threshold = .8
+threshold = .5
 sel = VarianceThreshold(threshold=(threshold * (1 - threshold)))
 sel.fit_transform(df_features)
-print(sel.get_feature_names_out())
+new_features = sel.get_feature_names_out()
+print(new_features)
+print(len(new_features))
 
 exit()
 
