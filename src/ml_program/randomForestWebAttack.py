@@ -13,7 +13,7 @@ import utilities as util
 import numpy as np
 from matplotlib import pyplot as plt
 
-MODEL_FILE = 'decisionTree_BruteForce.joblib'
+MODEL_FILE = 'randomForest.WebAttack.joblib'
 # The list of features for detecting bruteforce (FTP/SSH) attacks.
 WEBATTACK_FEATURES = ['Dst Port',
                       'Protocol',
@@ -50,7 +50,15 @@ WEBATTACK_FEATURES = ['Dst Port',
                       'Init Fwd Win Byts',
                       'Init Bwd Win Byts',
                       'Fwd Act Data Pkts',
-                      'Fwd Seg Size Min'
+                      'Fwd Seg Size Min',
+                      'Active Mean',
+                      'Active Std',
+                      'Active Max',
+                      'Active Min',
+                      'Idle Mean',
+                      'Idle Std',
+                      'Idle Max',
+                      'Idle Min',
                       ]
 WEBATTACK_FEATURES_V2 = ['Destination Port', 'Protocol', 'Flow Duration', 'Total Fwd Packets'
  'Total Backward Packets', 'Total Length of Fwd Packets'
@@ -71,11 +79,12 @@ WEBATTACK_FEATURES_V2 = ['Destination Port', 'Protocol', 'Flow Duration', 'Total
  'Active Max', 'Active Min', 'Idle Mean', 'Idle Std', 'Idle Max', 'Idle Min']
 
 # Craft the default specific path to the resources folder which holds the training and testing data
-st_path = os.path.join(os.getcwd(), 'resources', 'TrafficLabelling')
+st_path = os.path.join(os.getcwd(), 'resources')
 # Specify the training file
 # Webattacks
-st_file_2 = 'Friday-23-02-2018_TrafficForML_CICFlowMeter.csv'
-st_file = 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
+# st_file_2 = 'Friday-23-02-2018_TrafficForML_CICFlowMeter.csv'
+st_file_2 = 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
+st_file = 'Thursday-22-02-2018_TrafficForML_CICFlowMeter.csv'
 # DDos
 # st_file = 'Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv'
 # Brute force
@@ -94,7 +103,7 @@ encoding = 'utf_8'
 # MODELING
 # ***************************************
 RESAMPLE = True
-USE_TRAINED_MODEL = False  # Change this for training vs using existing model
+USE_TRAINED_MODEL = True  # Change this for training vs using existing model
 # Split the data into training and testing sets
 if USE_TRAINED_MODEL:
     # Load pretrained Decision Tree Classifier
@@ -111,16 +120,17 @@ if USE_TRAINED_MODEL:
                                                                        )
           )
 else:
-    X_train, y_train, target_names = util.prep_pipeline(os.path.join(st_path, st_file),
+    X_data, y_data, target_names = util.prep_pipeline(os.path.join(st_path, st_file),
                                                         WEBATTACK_FEATURES_V2,
                                                         encoding)
     if RESAMPLE:
-        X_data, y_data = util.resample(X_train, y_train)
+        X_data, y_data = util.resample(X_data, y_data)
     # Build new training data
     X_train, X_test, y_train, y_test = train_test_split(X_data,
                                                         y_data,
                                                         test_size=0.33,
                                                         random_state=42)
+    X_data, y_data = None, None
     # Training the model
     # Decision Tree Classifier - This is the key part of the code.
     clf = RandomForestClassifier()
@@ -129,9 +139,11 @@ else:
 
     # Testing the Model - Predictions and Evaluations
     prediction_test = clf.predict(X_test)
+    X_test = None
     print('*** Classification TRAIN Report ***\n{}\n******'.format(classification_report(y_test,
                                                                                          prediction_test,
                                                                                          target_names=target_names)))
+    y_test, prediction_test = None, None
 
 # *******************************************************************
 # New file test
