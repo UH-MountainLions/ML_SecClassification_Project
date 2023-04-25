@@ -164,6 +164,9 @@ def resample(data, answers):
     under_sampler = RandomUnderSampler(sampling_strategy='auto')
 
     # Create a pipeline for resampling
+    unique, counts = np.unique(answers, return_counts=True)
+    old_class_distribution = dict(zip(unique, counts))
+    print('old_class_distribution:', old_class_distribution)
     pipeline = Pipeline(steps=[('o', over_sampler),
                                ('u', under_sampler)])
     X_resampled, y_resampled = pipeline.fit_resample(data, answers)
