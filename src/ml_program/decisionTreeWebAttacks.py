@@ -69,13 +69,12 @@ WEBATTACK_FEATURES_V2 = ['Destination Port', 'Protocol', 'Flow Duration', 'Total
  'Init Fwd Win Byts', 'Init Bwd Win Byts', 'Fwd Act Data Pkts'
  'Fwd Seg Size Min', 'Active Mean', 'Active Std', 'Active Max', 'Active Min'
  'Idle Mean', 'Idle Std', 'Idle Max', 'Idle Min']
-WEBATTACK_FEATURES_V2 = None
 # Craft the default specific path to the resources folder which holds the training and testing data
 st_path = os.path.join(os.getcwd(), 'resources')
 # Specify the training file
 # Web Attacks
-st_file_2 = 'Friday-23-02-2018_TrafficForML_CICFlowMeter.csv'
-# st_file = 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
+# st_file = 'Friday-23-02-2018_TrafficForML_CICFlowMeter.csv'
+st_file_2 = 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
 st_file = 'Thursday-22-02-2018_TrafficForML_CICFlowMeter.csv'
 # DDos
 # st_file = 'Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv'
