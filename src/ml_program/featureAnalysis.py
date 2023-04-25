@@ -38,7 +38,7 @@ def lw_score(x):
 
 
 # Craft the default specific path to the resources folder which holds the training and testing data
-st_path = os.path.join(os.getcwd(), 'resources', 'TrafficLabelling')
+st_path = os.path.join(os.getcwd(), 'resources')
 # Specify the training file
 # Webattacks
 st_file = 'Friday-23-02-2018_TrafficForML_CICFlowMeter.csv'
@@ -61,7 +61,7 @@ encoding = 'utf_8'
 df_features, df_targets, df_target_names = util.prep_pipeline(os.path.join(st_path, st_file))
 df_features, df_targets = util.resample(df_features, df_targets)
 # Variance Check
-threshold = .5
+threshold = 0
 sel = VarianceThreshold(threshold=(threshold * (1 - threshold)))
 sel.fit_transform(df_features)
 new_features = sel.get_feature_names_out()
