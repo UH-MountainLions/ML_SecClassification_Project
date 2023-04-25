@@ -249,7 +249,6 @@ def data_training_prep(data):
         if data[col].dtypes not in ['int64', 'float64']:
             if data[col].dtype == 'int32':
                 data[col] = data[col].astype('int64')
-                continue
             elif data[col].dtype == 'float32':
                 data[col] = data[col].astype('float64')
             else:
