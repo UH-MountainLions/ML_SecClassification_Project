@@ -72,15 +72,15 @@ pip install ./
 ```
 
 ### Training and Testing Data
-CIC-IDS2017
-Download link: https://www.unb.ca/cic/datasets/ids-2017.html
+[CIC-IDS2017](https://www.unb.ca/cic/datasets/ids-2017.html)
+
 CICIDS2017 dataset contains benign and the most up-to-date common attacks, which resembles the true real-world data 
 (PCAPs). It also includes the results of the network traffic analysis using CICFlowMeter with labeled flows based on the 
 time stamp, source, destination IPs, source and destination ports, protocols, and attack (CSV files). Also available is 
 the extracted features definition.
 
-CIC-IDS2018 on AWS
-Download instructions: https://www.unb.ca/cic/datasets/ids-2018.html
+[CIC-IDS2018 on AWS](https://www.unb.ca/cic/datasets/ids-2018.html)
+
 In CSE-CIC-IDS2018 dataset, we use the notion of profiles to generate datasets in a systematic manner, which will 
 contain detailed descriptions of intrusions and abstract distribution models for applications, protocols, or lower-level
 network entities. Agents or human operators can use these profiles to generate events on the network. Due to the 
