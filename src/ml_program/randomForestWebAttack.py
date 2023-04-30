@@ -79,12 +79,12 @@ WEBATTACK_FEATURES_V2 = ['Destination Port', 'Protocol', 'Flow Duration', 'Total
  'Active Max', 'Active Min', 'Idle Mean', 'Idle Std', 'Idle Max', 'Idle Min']
 
 # Craft the default specific path to the resources folder which holds the training and testing data
-st_path = os.path.join(os.getcwd(), 'resources')
+st_path = os.path.join(os.getcwd(), 'resources', 'TrafficLabelling')
 # Specify the training file
 # Webattacks
-# st_file_2 = 'Friday-23-02-2018_TrafficForML_CICFlowMeter.csv'
+st_file = 'Friday-23-02-2018_TrafficForML_CICFlowMeter.csv'
 st_file_2 = 'Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
-st_file = 'Thursday-22-02-2018_TrafficForML_CICFlowMeter.csv'
+# st_file_2 = 'Thursday-22-02-2018_TrafficForML_CICFlowMeter.csv'
 # DDos
 # st_file = 'Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv'
 # Brute force
@@ -103,7 +103,7 @@ encoding = 'utf_8'
 # MODELING
 # ***************************************
 RESAMPLE = True
-USE_TRAINED_MODEL = True  # Change this for training vs using existing model
+USE_TRAINED_MODEL = False  # Change this for training vs using existing model
 # Split the data into training and testing sets
 if USE_TRAINED_MODEL:
     # Load pretrained Decision Tree Classifier
@@ -128,7 +128,7 @@ else:
     # Build new training data
     X_train, X_test, y_train, y_test = train_test_split(X_data,
                                                         y_data,
-                                                        test_size=0.33,
+                                                        test_size=0.3,
                                                         random_state=42)
     X_data, y_data = None, None
     # Training the model
