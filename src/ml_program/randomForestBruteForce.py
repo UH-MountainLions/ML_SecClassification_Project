@@ -16,27 +16,71 @@ from matplotlib import pyplot as plt
 MODEL_FILE = 'randomForest.BruteForce.joblib'
 # The list of features for detecting bruteforce (FTP/SSH) attacks.
 # BRUTEFORCE_V3
-BRUTEFORCE_FEATURES = ['Destination Port', 'Protocol', 'Flow Duration', 'Total Fwd Packets'
- 'Total Backward Packets', 'Total Length of Fwd Packets'
- 'Total Length of Bwd Packets', 'Fwd Packet Length Max'
- 'Fwd Packet Length Min', 'Fwd Packet Length Mean', 'Fwd Packet Length Std'
- 'Bwd Packet Length Max', 'Bwd Packet Length Min', 'Bwd Packet Length Mean'
- 'Bwd Packet Length Std', 'Flow Bytes/s', 'Flow Packets/s', 'Flow IAT Mean'
- 'Flow IAT Std', 'Flow IAT Max', 'Flow IAT Min', 'Fwd IAT Total'
- 'Fwd IAT Mean', 'Fwd IAT Std', 'Fwd IAT Max', 'Fwd IAT Min', 'Bwd IAT Total'
- 'Bwd IAT Mean', 'Bwd IAT Std', 'Bwd IAT Max', 'Bwd IAT Min'
- 'Fwd Header Length', 'Bwd Header Length', 'Fwd Packets/s', 'Bwd Packets/s'
- 'Min Packet Length', 'Max Packet Length', 'Packet Length Mean'
- 'Packet Length Std', 'Packet Length Variance', 'PSH Flag Count'
- 'ACK Flag Count', 'URG Flag Count', 'Down/Up Ratio', 'Avg Packet Size'
- 'Avg Fwd Segment Size', 'Avg Bwd Segment Size', 'Subflow Fwd Packets'
- 'Subflow Fwd Bytes', 'Subflow Bwd Packets', 'Subflow Bwd Bytes'
- 'Init Fwd Win Byts', 'Init Bwd Win Byts', 'Fwd Act Data Pkts'
- 'Fwd Seg Size Min', 'Active Mean', 'Active Std', 'Active Max', 'Active Min'
- 'Idle Mean', 'Idle Std', 'Idle Max', 'Idle Min']
+BRUTEFORCE_FEATURES = ['Fwd Packet Length Mean',
+                       'Down/Up Ratio',
+                       'Fwd Packet Length Max',
+                       'Fwd Header Length',
+                       'Bwd Packet Length Mean',
+                       'Flow IAT Max',
+                       'Fwd Packet Length Min',
+                       'Packet Length Mean',
+                       'Fwd Seg Size Min',
+                       'Bwd IAT Min',
+                       'Flow Packets/s',
+                       'Total Length of Bwd Packets',
+                       'Bwd Packet Length Min',
+                       'Fwd IAT Max',
+                       'Idle Std',
+                       'Total Fwd Packets',
+                       'Subflow Bwd Packets',
+                       'Bwd IAT Mean',
+                       'Fwd Packet Length Std',
+                       'Fwd IAT Total',
+                       'Init Fwd Win Byts',
+                       'Bwd Packets/s',
+                       'Flow IAT Min',
+                       'Idle Min',
+                       'Packet Length Variance',
+                       'Subflow Fwd Packets',
+                       'Fwd IAT Min',
+                       'Avg Packet Size',
+                       'Fwd IAT Mean',
+                       'Fwd Packets/s',
+                       'Packet Length Std',
+                       'Total Length of Fwd Packets',
+                       'Bwd Packet Length Max',
+                       'Max Packet Length',
+                       'Subflow Fwd Bytes',
+                       'Fwd Act Data Pkts',
+                       'Active Max',
+                       'Min Packet Length',
+                       'Active Min',
+                       'Protocol',
+                       'Total Backward Packets',
+                       'Flow Bytes/s',
+                       'Bwd IAT Max',
+                       'Idle Max',
+                       'Bwd IAT Total',
+                       'Avg Fwd Segment Size',
+                       'ACK Flag Count',
+                       'Active Mean',
+                       'Flow Duration',
+                       'Fwd IAT Std',
+                       'Bwd Packet Length Std',
+                       'Bwd Header Length',
+                       'Avg Bwd Segment Size',
+                       'Active Std',
+                       'Bwd IAT Std',
+                       'PSH Flag Count',
+                       'Subflow Bwd Bytes',
+                       'Flow IAT Mean',
+                       'Destination Port',
+                       'Flow IAT Std',
+                       'Idle Mean'
+                       ]
 
 # Craft the default specific path to the resources folder which holds the training and testing data
-st_path = os.path.join(os.getcwd(), 'resources')
+st_path = os.path.join(os.getcwd(), 'resources', 'TrafficLabelling')
 # Specify the training file
 # Webattacks
 # st_file = 'Friday-23-02-2018_TrafficForML_CICFlowMeter.csv'
@@ -84,7 +128,7 @@ else:
     # Build new training data
     X_train, X_test, y_train, y_test = train_test_split(X_train,
                                                         y_train,
-                                                        test_size=0.33,
+                                                        test_size=0.96,
                                                         random_state=42)
     # Training the model
     # Decision Tree Classifier - This is the key part of the code.
