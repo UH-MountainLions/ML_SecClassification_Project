@@ -99,7 +99,7 @@ BRUTEFORCE_FEATURES_V3 = ['Destination Port', 'Protocol', 'Flow Duration', 'Tota
  'Idle Mean', 'Idle Std', 'Idle Max', 'Idle Min']
 
 # Craft the default specific path to the resources folder which holds the training and testing data
-st_path = os.path.join(os.getcwd(), 'resources')
+st_path = os.path.join(os.getcwd(), 'resources', 'TrafficLabelling')
 # Specify the training file
 # Webattacks
 # st_file = 'Friday-23-02-2018_TrafficForML_CICFlowMeter.csv'
