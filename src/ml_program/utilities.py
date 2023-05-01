@@ -167,8 +167,7 @@ def resample(data, answers):
     unique, counts = np.unique(answers, return_counts=True)
     old_class_distribution = dict(zip(unique, counts))
     print('old_class_distribution:', old_class_distribution)
-    pipeline = Pipeline(steps=[('o', over_sampler),
-                               ('u', under_sampler)])
+    pipeline = Pipeline(steps=[('o', over_sampler) ])
     X_resampled, y_resampled = pipeline.fit_resample(data, answers)
 
     unique, counts = np.unique(y_resampled, return_counts=True)
