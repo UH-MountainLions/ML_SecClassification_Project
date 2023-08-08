@@ -27,7 +27,6 @@ instructions.
 ├-- .gitignore                              # Typical gitignore file
 ├-- CHANGELOG.md                            # running record (human readable) of version changes
 ├-- CONTRIBUTING.md                         # Directions and standards for contributing to this application
-├-- humans.md                               # Running list of all contributors
 ├-- LICENSE.md                              # Source of truth for required LICENSE
 ├-- pyproject.toml                          # Python toml setup configurations
 ├-- README.md                               # This file
