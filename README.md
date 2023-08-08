@@ -57,7 +57,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-See the list of [contributors](./humans.md) who participated in this project.
+See the list of [contributors](https://github.com/UH-MountainLions/ML_SecClassification_Project/graphs/contributors) who participated in this project.
 
 ## License
 
